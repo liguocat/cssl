@@ -1,0 +1,23 @@
+Package: cssl
+Title: Quantitative Trait Loci (QTLs) Mapping for Chromosome Segment Substitution Lines (CSSLs)
+Version: 0.0.1
+Authors@R: 
+    person("Li", "Guo", , "306422351@qq.com", role = c("aut", "cre"))
+Description: Quantitative trait loci (QTLs) mapping for chromosome segment substitution lines (CSSLs).
+License: AGPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: 
+    data.table,
+    glmnet,
+    lme4,
+    openxlsx,
+    parallel
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)
+LazyData: true

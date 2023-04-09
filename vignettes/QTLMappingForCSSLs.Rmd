@@ -1,0 +1,133 @@
+---
+title: "QTL mapping for CSSLs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{QTLMappingForCSSLs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Usage and arguments
+
+The function `cssl` is used to detect QTL for complex traits in CSSLs. The usage of `cssl` function is
+
+```{r, eval=FALSE}
+cssl(genotype  = genotype,
+     phenotype = phenotype,
+     dire      = NULL,
+     cores     = 1,
+     LOD       = 2.5,
+     BLUP      = FALSE,
+     qq        = FALSE)
+```
+
+
+- **genotype** This parameter allows three types of file formats, see **File format** for detailed file format.  
+    - Character string with path of the genotype file;  
+    - Data frame of the genotype;  
+    - Matrix of the genotype.  
+
+- **phenotype** This parameter allows two types of file formats, see **File format** for detailed file format.  
+    - Character string with path of the phenotype file;
+    - Data frame of the phenotype.
+
+- **dire** Character string with path for saving results. Defaults value is `NULL` and will save in working directory, using `getwd` to get the working directory.  
+- **cores** The number of CPU cores to use, for parallel calculations. Defaults is 1 and no parallel.  
+- **LOD** A numerical value indicates the threshold of LOD. Defaults is `2.5`.  
+- **BLUP** Defaults is `FALSE`. If it is `TRUE`, will calculate the BLUP (best linear unbiased prediction) values for trait measured in multi-environment.  
+- **qq** Defaults is `FALSE.` If it is `TRUE`, will transform quantitative trait phenotypic value using function `stats::qqnorm`. It is useful for expression quantitative trait locus (eQTL) mapping.  
+
+# File format
+
+## File format of genotype
+
+### Character string with path of the genotype file
+
+The file pointed to by the character string must be a comma-separated values (csv) file. An example data save in `system.file("extdata", package = "cssl")`. This file have five columns, including  
+- **Line** is the names of CSSL  
+- **Chromosome** is the names of chromosome  
+- **Start** is the position of start  
+- **End**	is the position of end  
+- **Type** is homozygote or heterozygote  
+
+```{r, eval=FALSE}
+system.file("extdata", "CSSL100.csv", package = "cssl")
+# genotype <- read.table(
+#   system.file("extdata", "CSSL100.csv", package = "cssl"), 
+#   sep = ",", header = TRUE)
+# head(genotype)
+```
+
+### Data frame of the genotype
+
+The **genotype** is a data frame. A example data save in `SimData$genotype`. It has five columns, including  
+- **Line** is the names of CSSL  
+- **Chromosome** is the names of chromosome  
+- **Start** is the position of start  
+- **End**	is the position of end  
+- **Type** is homozygote or heterozygote  
+
+```{r, eval=FALSE}
+library(cssl)
+data("SimData")
+head(SimData$genotype)
+```
+
+### Matrix of the genotype
+
+The **genotype** is a matrix. A example data save in `SimData$geno`. This matrix only contains -1, 1 and 0. The -1 is the code of background parent; 1 is the code of donor parent; and 0 is the heterozygote. This matrix must have row names (marker names) and column names (CSSL names).
+
+```{r, eval=FALSE}
+library(cssl)
+data(SimData)
+table(SimData$geno)
+colnames(SimData$geno)
+rownames(SimData$geno)
+```
+
+## File format of phenotype
+
+### Character string with path of the phenotype file
+
+The file pointed to by the character string must be a comma-separated values (csv) file. An example data save in `system.file("extdata", "phenotype.csv", package = "cssl")`. The **phenotype** file must include trait names, environmental names and phenotype values, where the first row shows column names. The first column is trait names. The second column is environmental name. All subsequent columns are phenotype values.
+
+```{r, eval=FALSE}
+system.file("extdata", "phenotype.csv", package = "cssl")
+phenotype <- read.table(
+  system.file("extdata", "phenotype.csv", package = "cssl"), 
+  sep = ",", header = TRUE)
+phenotype[, 1:8]
+```
+
+### Data frame of the phenotype
+
+The **genotype** is a data frame. A example data save in `SimData$phenotype`. It must include trait names, environmental names and phenotype values, where the first row shows column names. The first column is trait names. The second column is environmental name. All subsequent columns are phenotype values.
+
+```{r, eval=FALSE}
+library(cssl)
+data(SimData)
+SimData$phenotype[, 1:6]
+```
+
+## Example
+
+```{r, eval=FALSE}
+# library(cssl)
+data(SimData)
+result <- cssl(genotype  = SimData$genotype,
+               phenotype = SimData$phenotype,
+               LOD       = 5)
+
+
+result <- cssl(genotype  = system.file("extdata", "CSSL100.csv", package = "cssl"),
+               phenotype = system.file("extdata", "phenotype.csv", package = "cssl"), 
+               LOD       = 5)
+```
+

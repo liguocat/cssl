@@ -1,0 +1,30 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# cssl
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of cssl is to detect quantitative trait loci (QTLs) for chromosome segment substitution lines (CSSLs).
+
+## Installation
+
+You can install the development version of cssl from [GitHub](https://github.com/liguocat/cssl) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("liguocat/cssl")
+```
