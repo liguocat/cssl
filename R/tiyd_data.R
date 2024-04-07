@@ -121,18 +121,16 @@ tidy_data <- function(genotype  = genotype,
                  "names."))
     } else {
       geno <- apply(genotype, 2, as.numeric)
+      rownames(geno) <- rownames(genotype)
       if (!all(unique(as.vector(geno)) %in% c(-1, 0, 1))) {
         stop("The matrix of genotype can only contian -1, 1 and 0.")
       }
     }
-    pmap <- data.frame(Marker = colnames(geno))
+    pmap <- data.frame(Marker = rownames(geno))
   } else {
     stop("The argument 'genotype' is error.")
   }
   # phenotype
-  if (is.character(phenotype)) {
-
-  }
   if (is.character(phenotype)) {
     if (file.exists(phenotype)) {
       if (utils::tail(unlist(strsplit(basename(phenotype), "[.]")), 1) ==
